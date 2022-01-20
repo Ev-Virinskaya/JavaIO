@@ -1,7 +1,11 @@
 package elearn.JavaIO.MainTask;
 
-import java.io.IOException;
-import java.nio.file.*;
+
+
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +14,7 @@ import java.util.regex.Pattern;
 
 public class MyFileVisitor extends SimpleFileVisitor<Path> {
 
-    private List<String> filenames = new ArrayList<>();
-    private int depth;
-
+    private final List<String> filenames = new ArrayList<>();
 
     public List<String> getFilenames() {
         return filenames;
@@ -42,7 +44,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
         if (Files.isDirectory(dir)) {
             filenames.add(formatFilesRepresentation(dir) + (String.format("|-----%s\n", dir.getFileName())));
         }
@@ -50,7 +52,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
         if (Files.isRegularFile(file)) {
             filenames.add(formatFilesRepresentation(file) + String.format("|     %s\n", file.getFileName().toString()));
             System.out.println(file);
