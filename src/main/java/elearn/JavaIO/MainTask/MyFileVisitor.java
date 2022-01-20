@@ -55,7 +55,6 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
         if (Files.isRegularFile(file)) {
             filenames.add(formatFilesRepresentation(file) + String.format("|     %s\n", file.getFileName().toString()));
-            System.out.println(file);
         }
         return FileVisitResult.CONTINUE;
     }
