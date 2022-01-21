@@ -18,7 +18,7 @@ public class MainTask {
         if (Files.isRegularFile(path)) {
             printFileContext(path);
         } else if (Files.isDirectory(path)) {
-            writeDirectoryContextToFile();
+            writeDirectoryContextToFile("/directoryContext.txt");
         }
     }
 
@@ -33,8 +33,8 @@ public class MainTask {
         }
     }
 
-    public static void writeDirectoryContextToFile() {
-        Path resultFile = Paths.get(path.toString() + "/directoryContext.txt");
+    public static void writeDirectoryContextToFile(String fileName) {
+        Path resultFile = Paths.get(path.toString() + fileName);
         if (!Files.exists(resultFile)) {
             try {
                 Files.createFile(resultFile);

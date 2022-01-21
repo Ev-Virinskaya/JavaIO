@@ -24,7 +24,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
         super();
     }
 
-    private int createDepth(Path path) {
+    private int countDepth(Path path) {
         Pattern pattern = Pattern.compile("(\\\\)");
         Matcher matcher = pattern.matcher(path.toString());
         int count = 0;
@@ -37,7 +37,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
 
     private String formatFilesRepresentation(Path path) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 1; i < createDepth(path); i++) {
+        for (int i = 1; i < countDepth(path); i++) {
             builder.append("     ");
         }
         return builder.toString();

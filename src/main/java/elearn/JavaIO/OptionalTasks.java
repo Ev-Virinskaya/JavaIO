@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+
 
 
 public class OptionalTasks {
@@ -142,7 +142,7 @@ public class OptionalTasks {
 
     //task Seven
     public static void deleteWords(String fileName) throws IOException {
-        Pattern pattern = createPattern("(\\b\\w{3,5}\\b)");
+        Pattern pattern = Pattern.compile("(\\b\\w{3,5}\\b)");
         List<String> tempList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             Matcher matcher = pattern.matcher("");
@@ -175,21 +175,6 @@ public class OptionalTasks {
         }
 
         rewriteFile(tempList, fileName);
-    }
-
-    public static Pattern createPattern(String stringPattern) {
-        Pattern pattern = null;
-
-        try {
-            pattern = Pattern.compile(stringPattern);
-        } catch (PatternSyntaxException e) {
-            e.getMessage();
-            System.out.println(e.getDescription());
-            System.out.println(e.getIndex());
-            System.out.println(e.getPattern());
-
-        }
-        return pattern;
     }
 }
 
