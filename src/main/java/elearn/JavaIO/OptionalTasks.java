@@ -1,13 +1,7 @@
 package elearn.JavaIO;
 
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.FileWriter;
-import java.io.FileReader;
+import java.io.*;
 
 import java.util.List;
 import java.util.Arrays;
@@ -17,22 +11,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
 public class OptionalTasks {
     public static void main(String[] args) {
-
         try {
             //createFileWithRandomNumbers(makeNewDir(), 10);
             // replacePublicWithPrivate(new Scanner(System.in).nextLine(), "public", "private");
             //writeStringReverseOrder(makeNewDir(), "e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
             //replaceLowercaseWithUppercase("e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
 //          changeStudentsLastName("e:/elearn/JavaIO/data/Book1.xlsx");
-            deleteWords("e:/text.txt");
-            //deleteComments("e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
-
+            //deleteWords("e:/text.txt");
+            deleteComments("e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
+            //replaceWords("e:/text.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
 
     }
 
@@ -54,10 +49,10 @@ public class OptionalTasks {
     }
 
     public static void rewriteFile(List<String> list, String fileName) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        try (FileWriter writer = new FileWriter(fileName)) {
             for (String line : list) {
                 writer.write(line);
-                writer.newLine();
+                writer.write("\n");
             }
         }
     }
@@ -151,7 +146,7 @@ public class OptionalTasks {
                 matcher.reset(line);
                 int count = 0;
                 while (matcher.find()) {
-                        count++;
+                    count++;
                 }
                 if (count % 2 == 0) {
                     line = matcher.replaceAll("");
@@ -168,14 +163,48 @@ public class OptionalTasks {
     }
 
     //task Nine
-    public static void deleteComments(String fileName) throws IOException{
+    public static void deleteComments(String fileName) throws IOException {
+
         List<String> tempList = new ArrayList<>();
+        Pattern pattern = Pattern.compile("([^\"])(/\\*.+\\*/|//.+$)");
+        Matcher matcher = pattern.matcher("");
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String newLine;
+            while ((newLine = reader.readLine()) != null){
+                matcher.reset(newLine);
+                if(matcher.find()){
+                    tempList.add(newLine.replace(matcher.group(2), ""));
+                }else {
+                    tempList.add(newLine);
+                }
+            }
         }
-
         rewriteFile(tempList, fileName);
     }
-}
 
+
+    //task ten
+    public static void replaceWords(String fileName) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            List<String> newString = new ArrayList<>();
+            while (reader.ready()) {
+                String[] nextLine = reader.readLine().trim().split(" ");
+                String newFirstWord = nextLine[nextLine.length - 1];
+                nextLine[nextLine.length - 1] = nextLine[0];
+                nextLine[0] = newFirstWord;
+                StringBuilder builder = new StringBuilder();
+                for (String word : nextLine) {
+                    builder.append(word).append(" ");
+                }
+                newString.add(builder.toString().trim());
+            }
+            reader.close();
+            rewriteFile(newString, fileName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
