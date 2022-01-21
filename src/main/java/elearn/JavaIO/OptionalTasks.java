@@ -1,7 +1,11 @@
 package elearn.JavaIO;
 
-
-import java.io.*;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import java.util.List;
 import java.util.Arrays;
@@ -101,7 +105,7 @@ public class OptionalTasks {
     //task Tree
     public static void writeStringReverseOrder(String dir, String fileName) throws IOException {
         File fileReverseOrder = new File(dir + "/TaskTree.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileReverseOrder));
+        try (FileWriter writer = new FileWriter(fileReverseOrder);
              BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while (reader.ready()) {
                 StringBuilder reverseString = new StringBuilder();
@@ -110,7 +114,7 @@ public class OptionalTasks {
                     reverseString.append(line[i]);
                 }
                 writer.write(reverseString.toString());
-                writer.newLine();
+                writer.write("\n");
             }
         }
     }
