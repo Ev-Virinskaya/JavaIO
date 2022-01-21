@@ -27,8 +27,6 @@ public class OptionalTasks {
         }
 
 
-
-
     }
 
     public static String makeNewDir() {
@@ -170,11 +168,13 @@ public class OptionalTasks {
         Matcher matcher = pattern.matcher("");
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String newLine;
-            while ((newLine = reader.readLine()) != null){
+            while (reader.ready()) {
+                newLine = findMultilineComment(reader);
                 matcher.reset(newLine);
-                if(matcher.find()){
-                    tempList.add(newLine.replace(matcher.group(2), ""));
-                }else {
+                while (matcher.find()) {
+                    newLine = newLine.replace(matcher.group(2), "");
+                }
+                if (!matcher.find()) {
                     tempList.add(newLine);
                 }
             }
@@ -182,12 +182,24 @@ public class OptionalTasks {
         rewriteFile(tempList, fileName);
     }
 
+    public static String findMultilineComment(BufferedReader reader) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        String newLine = reader.readLine();
+        builder.append(newLine);
+        if (newLine.contains("/*") && !newLine.contains("*/")) {
+            while (!(newLine = reader.readLine()).contains("*/")) {
+                builder.append(" ").append(newLine);
+            }
+            builder.append(" ").append(newLine);
+        }
+        return builder.toString();
+    }
+
 
     //task ten
-    public static void replaceWords(String fileName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            List<String> newString = new ArrayList<>();
+    public static void replaceWords(String fileName) throws IOException {
+        List<String> newString = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while (reader.ready()) {
                 String[] nextLine = reader.readLine().trim().split(" ");
                 String newFirstWord = nextLine[nextLine.length - 1];
@@ -199,12 +211,8 @@ public class OptionalTasks {
                 }
                 newString.add(builder.toString().trim());
             }
-            reader.close();
-            rewriteFile(newString, fileName);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        rewriteFile(newString, fileName);
     }
 }
 
