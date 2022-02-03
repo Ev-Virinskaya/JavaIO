@@ -1,6 +1,4 @@
-package elearn.JavaIO.MainTask;
-
-
+package elearn.javaIO.mainTask;
 
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;

@@ -1,5 +1,4 @@
-package elearn.JavaIO.MainTask;
-
+package elearn.javaIO.mainTask;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,32 +8,51 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainTask {
     private static Path path;
 
     public static void main(String[] args) {
-        path = Paths.get(args[0]);
+        path = Paths.get("E:\\учеба\\java\\tutorials\\annotations");
+        //path = Paths.get("e:/elearn/JavaIO/data/MainTaskFile.txt");
         if (Files.isRegularFile(path)) {
             printFileContext(path);
         } else if (Files.isDirectory(path)) {
-            writeDirectoryContextToFile("/directoryContext.txt");
+            writeDirectoryContextToFile("e:/elearn/JavaIO/data/MainTask.txt");
         }
     }
 
     public static void printFileContext(Path path) {
+        long amountFiles = 0;
+        double averageLengthFileName = 0;
+        long amountFolders = 0;
+        Pattern pattern = Pattern.compile("(.+\\.[A-Za-z0-9]{1,10}\\b)");
+        Matcher matcher = pattern.matcher("");
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
             String nextLine;
+
             while ((nextLine = reader.readLine()) != null) {
-                System.out.println(nextLine);
+                matcher.reset(nextLine);
+                if(matcher.find()){
+                    amountFiles++;
+                    averageLengthFileName += nextLine.length();
+                } else {
+                    amountFolders++;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Количество папок: " + amountFolders);
+        System.out.println("Количество файлов: " + amountFiles);
+        System.out.println("Среднее количество файлов в папке: " + (amountFiles/amountFolders));
+        System.out.println("Средняя длинна названия файла: " + averageLengthFileName/amountFiles);
     }
 
     public static void writeDirectoryContextToFile(String fileName) {
-        Path resultFile = Paths.get(path.toString() + fileName);
+        Path resultFile = Paths.get(fileName);
         if (!Files.exists(resultFile)) {
             try {
                 Files.createFile(resultFile);

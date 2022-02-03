@@ -1,12 +1,12 @@
-package elearn.JavaIO;
+package elearn.javaIO;
 
-import java.io.FileWriter;
-import java.io.FileReader;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -18,36 +18,18 @@ import java.util.regex.Pattern;
 public class OptionalTasks {
     public static void main(String[] args) {
         try {
-            //createFileWithRandomNumbers(makeNewDir(), 10);
-            // replacePublicWithPrivate(new Scanner(System.in).nextLine(), "public", "private");
-            //writeStringReverseOrder(makeNewDir(), "e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
-            //replaceLowercaseWithUppercase("e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
-//          changeStudentsLastName("e:/elearn/JavaIO/data/Book1.xlsx");
-            //deleteWords("e:/text.txt");
-            deleteComments("e:/elearn/JavaIO/src/main/java/elearn/JavaIO/TestClass.java");
-            //replaceWords("e:/text.txt");
+            createFileWithRandomNumbers("e:/TaskOne.txt", 10);
+//            replacePublicWithPrivate("e:/elearn/JavaIO/data/TaskTwo.java", "public", "private");
+//            writeStringReverseOrder("e:/elearn/JavaIO/data/TaskTree.txt", "e:/elearn/JavaIO/src/main/java/elearn/javaIO/mainTask/MainTask.java");
+//            replaceLowercaseWithUppercase("e:/elearn/JavaIO/data/TaskTwo.java");
+//            deleteWords("e:/elearn/JavaIO/data/TaskSeven.txt");
+//            deleteComments("e:/elearn/JavaIO/data/TaskNine.java");
+//            replaceWords("e:/elearn/JavaIO/data/TaskTen.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-    }
-
-    public static String makeNewDir() {
-        String absolutPathNewDir = null;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String pathNameDirectory = reader.readLine();
-            File newDirectory = new File(pathNameDirectory);
-            if (!newDirectory.exists()) {
-                newDirectory.mkdirs();
-            }
-            absolutPathNewDir = newDirectory.getAbsolutePath();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return absolutPathNewDir;
     }
 
     public static void rewriteFile(List<String> list, String fileName) throws IOException {
@@ -60,27 +42,24 @@ public class OptionalTasks {
     }
 
     //task One
-    public static void createFileWithRandomNumbers(String folderOptionalTasks, int dataSize) throws IOException {
-        File newFile = new File(folderOptionalTasks + "/TaskOne.txt");
-
-        try (FileWriter writer = new FileWriter(newFile)) {
-
-            for (int i = 0; i < dataSize; i++) {
-                String str = Math.round(Math.random() * 10) + System.lineSeparator();
-                writer.write(str);
-                System.out.print(str);
-            }
-        }
-
+    //Создать и заполнить файл случайными целыми числами.
+    // Отсортировать содержимое файла по возрастанию.
+    public static void createFileWithRandomNumbers(String fileName, int dataSize) throws IOException {
+        File newFile = new File(fileName);
+        StringWriter writer = new StringWriter();
         int[] array = new int[dataSize];
-        try (BufferedReader reader = new BufferedReader(new FileReader(newFile))) {
-            while (reader.ready()) {
-                for (int i = 0; i < array.length; i++) {
-                    array[i] = Integer.parseInt(reader.readLine().trim());
-                    System.out.println(array[i]);
-                }
-            }
-            Arrays.sort(array);
+
+        for (int i = 0; i < dataSize; i++) {
+            writer.append(String.valueOf(Math.round(Math.random() * 10)))
+                    .append(System.lineSeparator());
+        }
+        String[] strArray = writer.toString().split(System.lineSeparator());
+        for (int i = 0; i < array.length; i++) {
+            array[i] = Integer.parseInt(strArray[i]);
+        }
+        Arrays.sort(array);
+        if (!newFile.exists()) {
+            newFile.createNewFile();
         }
 
         try (FileWriter sortedWriter = new FileWriter(newFile)) {
@@ -91,6 +70,8 @@ public class OptionalTasks {
     }
 
     //task Two
+    //Прочитать текст Java-программы и все слова public в объявлении атрибутов и методов класса
+    // заменить на слово private.
     public static void replacePublicWithPrivate(String fileName, String oldString, String newString) throws IOException {
 
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -103,10 +84,12 @@ public class OptionalTasks {
     }
 
     //task Tree
-    public static void writeStringReverseOrder(String dir, String fileName) throws IOException {
-        File fileReverseOrder = new File(dir + "/TaskTree.txt");
+    //Прочитать текст Java-программы
+    // и записать в другой файл в обратном порядке символы каждой строки.
+    public static void writeStringReverseOrder(String fileToWrite, String fileToRead) throws IOException {
+        File fileReverseOrder = new File(fileToWrite);
         try (FileWriter writer = new FileWriter(fileReverseOrder);
-             BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+             BufferedReader reader = new BufferedReader(new FileReader(fileToRead))) {
             while (reader.ready()) {
                 StringBuilder reverseString = new StringBuilder();
                 char[] line = reader.readLine().toCharArray();
@@ -120,15 +103,17 @@ public class OptionalTasks {
     }
 
     //task Four
+    //Прочитать текст Java-программы и в каждом слове длиннее двух символов
+    // все строчные символы заменить прописными.
     public static void replaceLowercaseWithUppercase(String fileName) throws IOException {
         List<String> tempList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while (reader.ready()) {
                 String newLine = reader.readLine();
-                String[] line = newLine.split("\\W");
+                String[] line = newLine.trim().split("\\W");
                 for (String str : line) {
                     if (str.length() > 2) {
-                        newLine = newLine.replace(str, str.toUpperCase());
+                        newLine = newLine.replaceFirst(str, str.toUpperCase());
                     }
                 }
                 tempList.add(newLine);
@@ -138,6 +123,8 @@ public class OptionalTasks {
     }
 
     //task Seven
+    // Из файла удалить все слова, содержащие от трех до пяти символов,
+    // но при этом из каждой строки должно быть удалено только максимальное четное количество таких слов.
     public static void deleteWords(String fileName) throws IOException {
         Pattern pattern = Pattern.compile("(\\b\\w{3,5}\\b)");
         List<String> tempList = new ArrayList<>();
@@ -165,10 +152,11 @@ public class OptionalTasks {
     }
 
     //task Nine
+    // Из текста Java-программы удалить все виды комментариев.
     public static void deleteComments(String fileName) throws IOException {
 
         List<String> tempList = new ArrayList<>();
-        Pattern pattern = Pattern.compile("([^\"])(/\\*.+\\*/|//.+$)");
+        Pattern pattern = Pattern.compile("(/\\*.+\\*/|//.+$)");
         Matcher matcher = pattern.matcher("");
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String newLine;
@@ -176,7 +164,7 @@ public class OptionalTasks {
                 newLine = findMultilineComment(reader);
                 matcher.reset(newLine);
                 while (matcher.find()) {
-                    newLine = newLine.replace(matcher.group(2), "");
+                    newLine = matcher.replaceAll("");
                 }
                 if (!matcher.find()) {
                     tempList.add(newLine);
@@ -201,6 +189,7 @@ public class OptionalTasks {
 
 
     //task ten
+    //Прочитать строки из файла и поменять местами первое и последнее слова в каждой строке.
     public static void replaceWords(String fileName) throws IOException {
         List<String> newString = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
