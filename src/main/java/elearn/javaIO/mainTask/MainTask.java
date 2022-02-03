@@ -15,8 +15,8 @@ public class MainTask {
     private static Path path;
 
     public static void main(String[] args) {
-        path = Paths.get("E:\\учеба\\java\\tutorials\\annotations");
-        //path = Paths.get("e:/elearn/JavaIO/data/MainTaskFile.txt");
+        path = Paths.get("E:/учеба/java/tutorials/annotations");
+        path = Paths.get("e:/elearn/JavaIO/data/MainTaskFile.txt");
         if (Files.isRegularFile(path)) {
             printFileContext(path);
         } else if (Files.isDirectory(path)) {

@@ -11,25 +11,26 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class OptionalTasks {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String fileName = scanner.nextLine();
         try {
-            createFileWithRandomNumbers("e:/TaskOne.txt", 10);
-//            replacePublicWithPrivate("e:/elearn/JavaIO/data/TaskTwo.java", "public", "private");
-//            writeStringReverseOrder("e:/elearn/JavaIO/data/TaskTree.txt", "e:/elearn/JavaIO/src/main/java/elearn/javaIO/mainTask/MainTask.java");
-//            replaceLowercaseWithUppercase("e:/elearn/JavaIO/data/TaskTwo.java");
-//            deleteWords("e:/elearn/JavaIO/data/TaskSeven.txt");
-//            deleteComments("e:/elearn/JavaIO/data/TaskNine.java");
-//            replaceWords("e:/elearn/JavaIO/data/TaskTen.txt");
+            createFileWithRandomNumbers(fileName, 10);
+            replacePublicWithPrivate(fileName,  "private","public");
+            writeStringReverseOrder(fileName, "src/main/java/elearn/javaIO/mainTask/MainTask.java");
+            replaceLowercaseWithUppercase(fileName);
+            deleteWords(fileName);
+            deleteComments(fileName);
+            replaceWords(fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void rewriteFile(List<String> list, String fileName) throws IOException {
@@ -186,7 +187,6 @@ public class OptionalTasks {
         }
         return builder.toString();
     }
-
 
     //task ten
     //Прочитать строки из файла и поменять местами первое и последнее слова в каждой строке.
